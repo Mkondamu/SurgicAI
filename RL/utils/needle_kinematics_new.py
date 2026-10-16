@@ -46,7 +46,10 @@ class NeedleKinematics_v2:
     T_bmINn = Frame(Rotation.RPY(0., 0., -np.pi/6), Vector(-Radius*np.cos(np.pi/6), Radius*np.sin(np.pi/6), 0.)/10.0)
 
 
-    def __init__(self, ral=None, topic='/ambf/env/phantom/Needle/State'):
+    def __init__(self, ral=None, topic=None):
+        if topic is None:
+            # current SRC: /ambf/env/phantom/Needle/State; authors' old scene: /ambf/env/Needle/State
+            topic = _os.environ.get('SURGICAI_NEEDLE_TOPIC', '/ambf/env/phantom/Needle/State')
         """
 
         :param ral: optional ros_abstraction_layer instance to reuse
