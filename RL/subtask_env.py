@@ -10,7 +10,7 @@ from surgical_robotics_challenge.scene import Scene
 from surgical_robotics_challenge.simulation_manager import SimulationManager
 from surgical_robotics_challenge.utils.task3_init import NeedleInitialization # Only for old SRC
 from utils.needle_kinematics_old import NeedleKinematics_v2
-from surgical_robotics_challenge.kinematics.psmFK import *
+from surgical_robotics_challenge.utils.utilities import convert_mat_to_frame, convert_frame_to_mat
 
 class SRC_subtask(gym.Env):
     """Custom Environment that follows gym interface"""

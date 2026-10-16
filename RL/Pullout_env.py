@@ -4,7 +4,7 @@ import numpy as np
 import time
 
 from PyKDL import Frame, Rotation, Vector
-from surgical_robotics_challenge.kinematics.psmFK import *
+from surgical_robotics_challenge.utils.utilities import convert_mat_to_frame, convert_frame_to_mat
 from subtask_env import SRC_subtask
 
 class SRC_pullout(SRC_subtask):
