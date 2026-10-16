@@ -39,10 +39,12 @@ class NeedleKinematics_v2:
     T_bmINn = Frame(Rotation.RPY(0., 0., -np.pi/6), Vector(-Radius*np.cos(np.pi/6), Radius*np.sin(np.pi/6), 0.)/10.0)
 
 
-    def __init__(self, ral=None):
+    def __init__(self, ral=None, topic='/ambf/env/phantom/Needle/State'):
         """
 
         :param ral: optional ros_abstraction_layer instance to reuse
+        :param topic: needle state topic. Current SRC publishes it under the phantom namespace
+                      (/ambf/env/phantom/Needle/State); older SRC used /ambf/env/Needle/State.
         :return:
         """
         # ROS 1 / ROS 2 neutral subscription via the same ros_abstraction_layer (ral)
@@ -54,7 +56,7 @@ class NeedleKinematics_v2:
             ral.spin()
         self._ral = ral
         self._needle_sub = ral.subscriber(
-            '/ambf/env/Needle/State', RigidBodyState, self.needle_cb, queue_size=1)
+            topic, RigidBodyState, self.needle_cb, queue_size=1)
         # Needle in World
         self._T_nINw = Frame()
 
