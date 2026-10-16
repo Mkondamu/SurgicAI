@@ -73,7 +73,9 @@ class SRC_subtask(gym.Env):
         self.psm2 = PSM(self.simulation_manager, 'psm2',add_joint_errors=False)
         self.psm_list = [self.psm1, self.psm2]
         self.ecm = ECM(self.simulation_manager, 'CameraFrame')
-        self.ecm2 = ECM(self.simulation_manager, 'FreeCamera')
+        # 'FreeCamera' existed in the older SRC scene but is not in the current one, and ecm2 is
+        # never used anywhere else in SurgicAI, so it is left unset instead of crashing.
+        self.ecm2 = None
         self.Camera_view_reset()
 
         self.needle = NeedleInitialization(self.simulation_manager) # needle obj
