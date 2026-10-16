@@ -79,7 +79,7 @@ class SRC_subtask(gym.Env):
         self.Camera_view_reset()
 
         self.needle = NeedleInitialization(self.simulation_manager) # needle obj
-        self.needle_kin = NeedleKinematics_v2(self.simulation_manager.get_ral()) # needle movement and positioning
+        self.needle_kin = NeedleKinematics_v2(getattr(self.simulation_manager, 'get_ral', lambda: None)()) # needle movement and positioning
         self.init_psm1 = np.array([ 0.04629208,0.00752399,-0.08173992,-3.598019,-0.05762508,1.2738742,0.8],dtype=np.float32)
         self.psm1_goal = self.init_psm1
         self.psm_step(self.psm1_goal,1)
