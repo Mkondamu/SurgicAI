@@ -19,6 +19,13 @@ def pose_msg_to_frame(msg):
 
     return Frame(R, p)
 
+# The needle pose arrives in simulator units. The old SRC (v1.0.0) scaled assets x10, so
+# SurgicAI divided by 10 to get metres. Current SRC is already SI, so the default is 1.0.
+# Needle-geometry offsets below (Radius ...) stay /10: they are fixed sizes in metres.
+# Set env var SURGICAI_SIM_POS_DIV=10 to reproduce the old-scale behaviour.
+import os as _os
+SIM_POS_DIV = float(_os.environ.get('SURGICAI_SIM_POS_DIV', '1.0'))
+
 class NeedleKinematics_v2:
     # # Base in Needle Origin
     # T_bINn = Frame(Rotation.RPY(0., 0., 0.), Vector(-0.102, 0., 0.)/10.0)
@@ -66,7 +73,7 @@ class NeedleKinematics_v2:
         :return:
         """
         self._T_nINw = pose_msg_to_frame(msg.pose)
-        self._T_nINw.p = self._T_nINw.p /10.0
+        self._T_nINw.p = self._T_nINw.p / SIM_POS_DIV
 
     def get_tip_pose(self):
         """
