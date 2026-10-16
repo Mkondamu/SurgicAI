@@ -1,6 +1,5 @@
 from PyKDL import Frame, Rotation, Vector
 import numpy as np
-import rospy
 from ambf_msgs.msg import RigidBodyState
 
 def pose_msg_to_frame(msg):
@@ -40,12 +39,21 @@ class NeedleKinematics_v2:
     T_bmINn = Frame(Rotation.RPY(0., 0., -np.pi/6), Vector(-Radius*np.cos(np.pi/6), Radius*np.sin(np.pi/6), 0.)/10.0)
 
 
-    def __init__(self):
+    def __init__(self, ral=None):
         """
 
+        :param ral: optional ros_abstraction_layer instance to reuse
         :return:
         """
-        self._needle_sub = rospy.Subscriber(
+        # ROS 1 / ROS 2 neutral subscription via the same ros_abstraction_layer (ral)
+        # that the AMBF 3.0 client uses. Pass simulation_manager.get_ral() so the
+        # subscriber shares the client's node and executor (AMBF's connect() already spins it).
+        if ral is None:
+            from ros_abstraction_layer import ral as RAL
+            ral = RAL('needle_kinematics')
+            ral.spin()
+        self._ral = ral
+        self._needle_sub = ral.subscriber(
             '/ambf/env/Needle/State', RigidBodyState, self.needle_cb, queue_size=1)
         # Needle in World
         self._T_nINw = Frame()
