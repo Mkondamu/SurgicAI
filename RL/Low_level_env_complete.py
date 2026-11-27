@@ -12,6 +12,7 @@ from surgical_robotics_challenge.scene import Scene
 from surgical_robotics_challenge.simulation_manager import SimulationManager
 from surgical_robotics_challenge.utils.task3_init import NeedleInitialization
 from utils.needle_kinematics_old import NeedleKinematics_v2
+from utils.scene_offset import scene_offset
 from surgical_robotics_challenge.utils.utilities import convert_mat_to_frame, convert_frame_to_mat
 
 
@@ -85,6 +86,7 @@ class SRC_low_level(gym.Env):
         # Initialize simulation environment
         self.world_handle = self.simulation_manager.get_world_handle()
         self.scene = Scene(self.simulation_manager)
+        self.scene_offset = scene_offset(self.scene)
         self.psm1 = PSM(self.simulation_manager, 'psm1',add_joint_errors=False)
         self.psm2 = PSM(self.simulation_manager, 'psm2',add_joint_errors=False)
         self.psm_list = [self.psm1, self.psm2]
@@ -197,7 +199,7 @@ class SRC_low_level(gym.Env):
             0.0, -0.766044, 0.642788,
             0.0, 0.642788, 0.766044)
 
-        vector = Vector(0.0, 0.1463076, 0.187126)
+        vector = Vector(0.0, 0.1463076, 0.187126) + self.scene_offset
         self.ecm_pos_origin = Frame(rotation, vector)
         self.ecm.servo_cp(self.ecm_pos_origin)
 
@@ -370,7 +372,7 @@ class SRC_low_level(gym.Env):
 
 
     def needle_randomization(self):
-        origin_p = Vector( -0.0207937, 0.0562045, 0.0711726)
+        origin_p = Vector( -0.0207937, 0.0562045, 0.0711726) + self.scene_offset
         origin_rz = 0.0
 
 
